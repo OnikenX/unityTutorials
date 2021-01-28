@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
 
     private int moneyHoney = 0;
     private int superJump = 0;
-    private int superJumpMultiplier;
+    private float superJumpMultiplier;
 
     // Start is called before the first frame update
     void Start()
@@ -44,30 +44,36 @@ public class Player : MonoBehaviour
     {
         rigidBody.velocity = new Vector3(horizontalInput, rigidBody.velocity.y, rigidBody.velocity.z);
 
-        if (Physics.OverlapSphere(groundChecktransform.position, 0.1f, playerMask).Length == 1)
-            return;
+        if (Physics.OverlapSphere(groundChecktransform.position, 0.1f, playerMask).Length == 0){
+            if (superJump > 0)
+                superJump--;
+            else
+                return;
+        }
 
         if (jumpKeyWasPressed)
         {
-            if (superJump > 0){
-                superJumpMultiplier = 2;
-                rigidBody.AddForce(Vector3.up * 7, ForceMode.VelocityChange);
-                
+            if (superJump > 0)
+            {
+                superJumpMultiplier = 1.2f;
+                superJump--;
             }
-            
 
-            
+
+            rigidBody.AddForce(Vector3.up * 7 * superJumpMultiplier, ForceMode.VelocityChange);
+            superJumpMultiplier = 1;
+
             jumpKeyWasPressed = false;
 
         }
     }
-    private void OnTriggerEnter(GameObject other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 7)
         {
             Destroy(other.gameObject);
             ++gamecounter;
-            superJump++;
+            ++superJump;
         }
     }
 }
