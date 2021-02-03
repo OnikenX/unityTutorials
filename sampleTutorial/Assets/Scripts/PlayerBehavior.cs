@@ -25,9 +25,11 @@ public class PlayerBehavior : MonoBehaviour
     public CharacterController controller;
     Vector3 move;
     //serializefield lets you see the atribute in the editor/inspector(public can do the same job)
-    [SerializeField] private Transform groundChecktransform;
+    //[SerializeField] private Transform groundChecktransform;
 
-    [SerializeField] private Rigidbody rigidBody;
+    [SerializeField] private Transform mainBody;
+
+    // [SerializeField] private Rigidbody rigidBody;
 
     //input variables
     private float horizontalInput, verticalInput, jump;
@@ -49,7 +51,7 @@ public class PlayerBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = rigidBody.position;
+        startPosition = mainBody.position;
     }
 
 
@@ -60,8 +62,15 @@ public class PlayerBehavior : MonoBehaviour
         jump = Input.GetAxis("Jump");
         horizontalInput = Input.GetAxis("Horizontal") * 1.8f;
         verticalInput = Input.GetAxis("Vertical") * 1.8f;
+        ApplyMovement();
     }
 
+    void ApplyMovement(){
+        move = transform.right * horizontalInput + transform.forward * verticalInput;
+        controller.Move(move * speed * Time.deltaTime);
+
+    
+    }
 
 
     // updates with an alpha of the phisics instead of pear frame
@@ -69,35 +78,33 @@ public class PlayerBehavior : MonoBehaviour
     {
 
         //reseting if dropped
-        if (rigidBody.position.y < -20)
-            rigidBody.position = startPosition;
-
-        //this makes the horizontal moviment
-        move = transform.right * horizontalInput + transform.forward * verticalInput;
-        controller.Move(move * speed * Time.deltaTime);
+        if (mainBody.position.y < -20)
+            mainBody.position = startPosition;
+        
 
         //verify if its touching the ground for the jump proprieties
-        if (Physics.OverlapSphere(groundChecktransform.position, 0.1f, playerMask).Length == 0)
-        {
-            if (superJump > 0)
-                superJump--;
-            else
-                return;
-        }
+        // if (Physics.OverlapSphere(groundChecktransform.position, 0.1f, playerMask).Length == 0)
+        // {
+        //     if (superJump > 0)
+        //         superJump--;
+        //     else
+        //         return;
+        // }
 
-        if (jump > 0.1f)
-        {
-            System.Console.WriteLine(jump);
-            superJumpMultiplier = 1;
-            if (superJump > 0)
-            {
-                superJumpMultiplier = 1.2f;
-                superJump--;
-            }
+        // treating jump logic
+        // if (jump > 0.1f)
+        // {
+        //     System.Console.WriteLine(jump);
+        //     superJumpMultiplier = 1;
+        //     if (superJump > 0)
+        //     {
+        //         superJumpMultiplier = 1.2f;
+        //         superJump--;
+        //     }
 
-            rigidBody.AddForce(Vector3.up * 7 * superJumpMultiplier , ForceMode.VelocityChange);
-            jump = 0f;
-        }
+        //     rigidBody.AddForce(Vector3.up * 7 * superJumpMultiplier , ForceMode.VelocityChange);
+        //     jump = 0f;
+        // }
     }
     private void OnTriggerEnter(Collider other)
     {

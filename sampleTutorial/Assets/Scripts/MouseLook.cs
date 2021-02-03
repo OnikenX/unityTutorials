@@ -37,17 +37,12 @@ public class MouseLook : MonoBehaviour
         //it is subtracted because, if we add it, it will be inverted
         xRotation -= mouseY;
 
-        //clamping the vision(limiting) for that the vision doesn't goes upside down and stay always bvqehind the player
+        //clamping the vision(limiting) for that the vision doesn't goes upside down and stay always behind the player
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         //to apply the rotation to the actual element
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         //rotating the player
         playerBody.Rotate(Vector3.up * mouseX);
-    }
-
-    void FixedUpdate()
-    {
-
     }
 }
