@@ -82,29 +82,7 @@ public class PlayerBehavior : MonoBehaviour
             mainBody.position = startPosition;
         
 
-        //verify if its touching the ground for the jump proprieties
-        // if (Physics.OverlapSphere(groundChecktransform.position, 0.1f, playerMask).Length == 0)
-        // {
-        //     if (superJump > 0)
-        //         superJump--;
-        //     else
-        //         return;
-        // }
 
-        // treating jump logic
-        // if (jump > 0.1f)
-        // {
-        //     System.Console.WriteLine(jump);
-        //     superJumpMultiplier = 1;
-        //     if (superJump > 0)
-        //     {
-        //         superJumpMultiplier = 1.2f;
-        //         superJump--;
-        //     }
-
-        //     rigidBody.AddForce(Vector3.up * 7 * superJumpMultiplier , ForceMode.VelocityChange);
-        //     jump = 0f;
-        // }
     }
     private void OnTriggerEnter(Collider other)
     {
